@@ -38,7 +38,7 @@ void main() {
     // seed rand function with current time
     srand (time(NULL));
     // pick a restaurant
-    printf("The restaurant you will go to is: %s", restaurantsArrayCopy[rand() % insertIndex]);
+    printf("The restaurant you will go to is: %s", restaurantsArrayCopy[getRandom(0, insertIndex-1)]);
     // free allocated memory
     for (int i=0; i<=insertIndex; i++) {
 	free(restaurantsArray[i]);
