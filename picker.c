@@ -46,7 +46,7 @@ int main() {
     if (getRestaurantsFromFile(restaurantsArrayCopy) != 0) {
         printf("No restaurants.txt file exists in this directory. Please create it, then run this program again.");
         for (int i=0; i<=insertIndex; i++) {
-	        free(restaurantsArray[i]);
+	    free(restaurantsArray[i]);
         }
         free(restaurantsArray);
         return 1;
@@ -64,6 +64,32 @@ int main() {
         if (strcmp(inputCopy, "h") == 0) {
             printf("\nCOMMANDS:\na - add a restaurant\np - pick a restaurant\nq - close the program\n\n");
         }
+	
+	else if (strcmp(inputCopy, "a") == 0) {
+	    FILE *restaurantsFile = fopen("./restaurants.txt", "a");
+	    char *restaurant = (char *)malloc(50 * sizeof(char));
+	    char *restaurantCopy = restaurant;
+	    printf("\nEnter the name of the restaurant you would like to add:\n\n");
+	    fgets(restaurantCopy, 50, stdin);
+
+	    //fopen will return null if it is unable to read the file
+	    if (restaurantsFile == NULL) {
+		fclose(restaurantsFile);
+		free(restaurant);
+		break;
+	    }
+
+	    // add to array
+	    restaurantsArrayCopy[insertIndex] = (char *) malloc(50 * sizeof(char));
+	    strcpy(restaurantsArrayCopy[insertIndex], restaurantCopy);
+	    insertIndex++;
+	    
+	    // write to file
+	    fprintf(restaurantsFile, restaurantCopy);
+	    fclose(restaurantsFile);
+	    free(restaurant);
+	}
+		
         else if (strcmp(inputCopy, "p") == 0) {
             printf("\nThe restaurant you will go to is %s.\n\n", restaurantsArrayCopy[getRandom(0, insertIndex-1)]);
         }
