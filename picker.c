@@ -7,9 +7,9 @@
 int insertIndex = 0;
 
 static void sigint_handler(int signal, siginfo_t * t, void *arg) {
-    printf("\n\nExiting program...\n");
-    pid_t pid = getpid();
-    kill(pid, SIGKILL);
+    printf("\n\nYou're not allowed to kill my program :)\n");
+    // pid_t pid = getpid();
+    // kill(pid, SIGKILL);
 }
 
 int getRandom(int min, int max) {
