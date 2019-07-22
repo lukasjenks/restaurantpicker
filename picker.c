@@ -2,12 +2,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <signal.h>
 
 int insertIndex = 0;
 
+static void sigint_handler(int signal, siginfo_t * t, void *arg) {
+    printf("\n\nExiting program...\n");
+    pid_t pid = getpid();
+    kill(pid, SIGKILL);
+}
+
 int getRandom(int min, int max) {
-    // seed rand function with current time
-    srand (time(NULL));
     return min + rand() / (RAND_MAX / (max - min + 1) + 1);
 }
 
@@ -39,6 +44,7 @@ int getRestaurantsFromFile(char **restaurantsArray) {
 }
 
 int main() {
+    srand (time(NULL));
     // initialize restaurant array and populate it with restaurants from the file
     char **restaurantsArray = (char **)malloc(100 * sizeof(char *));
     char **restaurantsArrayCopy = restaurantsArray;
@@ -51,6 +57,15 @@ int main() {
         free(restaurantsArray);
         return 1;
     }
+
+    // struct to define behaviour for sigint signals (changes default behaviour of SIGINT
+    // encounter to be to call the isgint_handler function)
+    struct sigaction sa_sigint;
+    memset(&sa_sigint, 0, sizeof(sa_sigint));
+    sigemptyset(&sa_sigint.sa_mask);
+    sa_sigint.sa_sigaction = sigint_handler;
+    sa_sigint.sa_flags = SA_SIGINFO;
+    sigaction(SIGINT, &sa_sigint, NULL);
 
     printf("\nEnter a command. For a list of commands available, enter 'h'\n\n");
     char *input = (char *)malloc(50 * sizeof(char *));
