@@ -38,7 +38,7 @@ int getRestaurantsFromFile(char **restaurantsArray) {
     }
 }
 
-void main() {
+int main() {
     // initialize restaurant array and populate it with restaurants from the file
     char **restaurantsArray = (char **)malloc(100 * sizeof(char *));
     char **restaurantsArrayCopy = restaurantsArray;
@@ -49,24 +49,26 @@ void main() {
 	        free(restaurantsArray[i]);
         }
         free(restaurantsArray);
-        return;
+        return 1;
     }
 
-    printf("Enter a command. For a list of commands available, enter 'h'\n");
+    printf("\nEnter a command. For a list of commands available, enter 'h'\n\n");
     char *input = (char *)malloc(50 * sizeof(char *));
     char *inputCopy = input;
 
     // main loop to process user input
-    while (fgets(inputCopy, 50, stdin)) {
+    while (1) {
+	printf("> ");
+	fgets(inputCopy, 50, stdin);
         inputCopy[strlen(inputCopy)-1] = '\0';
         if (strcmp(inputCopy, "h") == 0) {
-            printf("COMMANDS:\na - add a restaurant\np - pick a restaurant\nq - close the program\n");
+            printf("\nCOMMANDS:\na - add a restaurant\np - pick a restaurant\nq - close the program\n\n");
         }
         else if (strcmp(inputCopy, "p") == 0) {
-            printf("The restaurant you will go to is %s.\n", restaurantsArrayCopy[getRandom(0, insertIndex-1)]);
+            printf("\nThe restaurant you will go to is %s.\n\n", restaurantsArrayCopy[getRandom(0, insertIndex-1)]);
         }
         else if (strcmp(inputCopy, "q") == 0) {
-            printf("Exiting program...\n");
+            printf("\nExiting program...\n");
             break;
         }
     }
@@ -77,4 +79,5 @@ void main() {
 	    free(restaurantsArray[i]);
     }
     free(restaurantsArray);
+    return 0;
 }
