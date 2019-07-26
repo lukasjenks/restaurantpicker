@@ -153,7 +153,7 @@ int main() {
         }
 	// List all possible options
 	else if (strcmp(inputCopy, "l") == 0) {
-	    for(int i = 0; i < insertIndex - 1; i++) {
+	    for (int i = 0; i < insertIndex - 1; i++) {
 	    	printf("\n%s\n", restaurantsArrayCopy[i]);
 	    }
 	}
