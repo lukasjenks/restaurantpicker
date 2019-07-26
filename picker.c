@@ -134,6 +134,9 @@ int main() {
 
 	    if (found == 0) {
 		printf("\nThere is no restaurant in the system by that name\n\n"); 
+		fclose(restaurantsFile);
+		free(restaurant);
+		break;
 	    }
 
 	    // write to fie
