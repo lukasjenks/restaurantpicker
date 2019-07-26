@@ -134,16 +134,14 @@ int main() {
 
 	    if (found == 0) {
 		printf("\nThere is no restaurant in the system by that name\n\n"); 
-		fclose(restaurantsFile);
-		free(restaurant);
-		break;
 	    }
-
-	    // write to fie
-	    fclose(restaurantsFile);
-	    restaurantsFile = fopen("./restaurants.txt", "w");
-	    for (int index = 0; index < insertIndex; index++) {
-		fprintf(restaurantsFile, "%s\n", restaurantsArrayCopy[index]);
+	    else {
+	    	// write to fie
+	    	fclose(restaurantsFile);
+	    	restaurantsFile = fopen("./restaurants.txt", "w");
+	    	for (int index = 0; index < insertIndex; index++) {
+			fprintf(restaurantsFile, "%s\n", restaurantsArrayCopy[index]);
+	    	}
 	    }
 	    
 	    fclose(restaurantsFile);
