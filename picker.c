@@ -63,7 +63,7 @@ int main() {
 	inputCopy[strlen(inputCopy)-1] = '\0';
 	// Display help message mode
         if (strcmp(inputCopy, "h") == 0) {
-            printf("\nCOMMANDS:\na - add a restaurant\np - pick a restaurant\nq - close the program\n\n");
+            printf("\nCOMMANDS:\na - add a restaurant\np - pick a restaurant\nl - list all possible restaurants\nq - close the program\n\n");
         }
 	// Add restaurant mode
 	else if (strcmp(inputCopy, "a") == 0) {
@@ -151,7 +151,12 @@ int main() {
         else if (strcmp(inputCopy, "p") == 0) {
             printf("\nThe restaurant you will go to is %s.\n\n", restaurantsArrayCopy[getRandom(0, insertIndex-1)]);
         }
-
+	// List all possible options
+	else if (strcmp(inputCopy, "l") == 0) {
+	    for (int i = 0; i < insertIndex - 1; i++) {
+	    	printf("\n%s\n", restaurantsArrayCopy[i]);
+	    }
+	}
 	// Quit mode
         else if (strcmp(inputCopy, "q") == 0) {
             printf("\nExiting program...\n");
