@@ -3,39 +3,9 @@
 #include <string.h>
 #include <time.h>
 #include <signal.h>
+#include "picker.h"
 
 int insertIndex = 0;
-
-int getRandom(int min, int max) {
-    return min + rand() / (RAND_MAX / (max - min + 1) + 1);
-}
-
-int getRestaurantsFromFile(char **restaurantsArray) {
-    FILE *restaurantsFile = fopen("./restaurants.txt", "r");
-    char *restaurant = (char *)malloc(50 * sizeof(char));
-    char *restaurantCopy = restaurant;
-
-    //fopen will return null if it is unable to read the file
-    if (restaurantsFile == NULL) {
-        fclose(restaurantsFile);
-	    free(restaurant);
-        return 1;
-    }
-    else {   
-        while (fgets(restaurantCopy, 50, restaurantsFile)) {
-            restaurantsArray[insertIndex] = (char*)malloc(50 * sizeof(char));
-            // replace newline at end of string with null terminator if exist
-            if (restaurantCopy[strlen(restaurantCopy)-1] == '\n') {
-                restaurantCopy[strlen(restaurantCopy)-1] = '\0';
-            }
-            strcpy(restaurantsArray[insertIndex], restaurantCopy);
-            insertIndex++;
-        }
-        fclose(restaurantsFile);
-        free(restaurant);
-        return 0;
-    }
-}
 
 int main() {
     srand (time(NULL));
@@ -171,4 +141,41 @@ int main() {
     }
     free(restaurantsArray);
     return 0;
+}
+
+/*
+	Opens restaurants.txt and reads in the contents into a string array
+*/
+int getRestaurantsFromFile(char **restaurantsArray) {
+    FILE *restaurantsFile = fopen("./restaurants.txt", "r");
+    char *restaurant = (char *)malloc(50 * sizeof(char));
+    char *restaurantCopy = restaurant;
+
+    //fopen will return null if it is unable to read the file
+    if (restaurantsFile == NULL) {
+        fclose(restaurantsFile);
+	    free(restaurant);
+        return 1;
+    }
+    else {   
+        while (fgets(restaurantCopy, 50, restaurantsFile)) {
+            restaurantsArray[insertIndex] = (char*)malloc(50 * sizeof(char));
+            // replace newline at end of string with null terminator if exist
+            if (restaurantCopy[strlen(restaurantCopy)-1] == '\n') {
+                restaurantCopy[strlen(restaurantCopy)-1] = '\0';
+            }
+            strcpy(restaurantsArray[insertIndex], restaurantCopy);
+            insertIndex++;
+        }
+        fclose(restaurantsFile);
+        free(restaurant);
+        return 0;
+    }
+}
+
+/*
+	generates a random number between min & max
+*/
+int getRandom(int min, int max) {
+    return min + rand() / (RAND_MAX / (max - min + 1) + 1);
 }
