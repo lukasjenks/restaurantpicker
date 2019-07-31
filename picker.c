@@ -7,8 +7,24 @@
 
 int insertIndex = 0;
 
+static void sigint_handler(int signal, siginfo_t *t, void *arg) {
+    printf("\n\nPlease use the q command to exit.\n\n");
+}
+
 int main() {
+
+    // seed random function with current time
     srand (time(NULL));
+
+    // setup interrupt struct so that sigint is rerouted to interrupt routine
+    // to preserve memory management
+    struct sigaction sa_sigint;
+    memset(&sa_sigint, 0, sizeof(sa_sigint));
+    sigemptyset(&sa_sigint.sa_mask);
+    sa_sigint.sa_sigaction = sigint_handler;
+    sa_sigint.sa_flags = SA_SIGINFO;
+    sigaction(SIGINT, &sa_sigint, NULL);
+    
     // initialize restaurant array and populate it with restaurants from the file
     char **restaurantsArray = (char **)malloc(100 * sizeof(char *));
     char **restaurantsArrayCopy = restaurantsArray;
@@ -41,9 +57,7 @@ int main() {
 	    char *restaurant = (char *)malloc(50 * sizeof(char));
 	    char *restaurantCopy = restaurant;
 	    printf("\nEnter the name of the restaurant you would like to add:\n\n");
-	    fgets(restaurantCopy, 50, stdin);
-	    // Replace newline at end of input string with null terminator
-	    restaurantCopy[strlen(restaurantCopy)-1] = '\0';	    
+	    fgets(restaurantCopy, 50, stdin);	    
 
 	    // fopen will return null if it is unable to read the file
 	    if (restaurantsFile == NULL) {
@@ -53,14 +67,17 @@ int main() {
 		break;
 	    }
 
+	    // write to file
+	    fprintf(restaurantsFile, restaurantCopy);
+	    fclose(restaurantsFile);
+
+	    // Replace newline at end of input string with null terminator
+	    restaurantCopy[strlen(restaurantCopy)-1] = '\0';	    
+
 	    // add to array
 	    restaurantsArrayCopy[insertIndex] = (char *) malloc(50 * sizeof(char));
 	    strcpy(restaurantsArrayCopy[insertIndex], restaurantCopy);
 	    insertIndex++;
-	    
-	    // write to file
-	    fprintf(restaurantsFile, restaurantCopy);
-	    fclose(restaurantsFile);
 	    free(restaurant);
 	}
 	// Remove restaurant mode
@@ -126,6 +143,7 @@ int main() {
 	    for (int i = 0; i < insertIndex - 1; i++) {
 	    	printf("\n%s\n", restaurantsArrayCopy[i]);
 	    }
+	    printf("\n");
 	}
 	// Quit mode
         else if (strcmp(inputCopy, "q") == 0) {
