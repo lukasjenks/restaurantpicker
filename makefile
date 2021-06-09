@@ -3,8 +3,8 @@ CFLAGS=-g -Wall
 
 all:	picker
 
-picker:	picker.c
-	$(CC) $(CFLAGS) -o picker picker.c
+picker:	picker.c picker.h
+	$(CC) $(CFLAGS) -o $@ $^
 
 test:
 	./picker
