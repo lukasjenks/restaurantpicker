@@ -29,7 +29,7 @@ int main() {
     char **restaurantsArray = (char **)malloc(100 * sizeof(char *));
     char **restaurantsArrayCopy = restaurantsArray;
 
-    if (getRestaurantsFromFile(restaurantsArrayCopy) != 0) {
+    if (getRestaurantsFromFile(restaurantsArrayCopy, &insertIndex) != 0) {
         printf("No restaurants.txt file exists in this directory. Please create it, then run this program again.");
         for (int i=0; i<=insertIndex; i++) {
 	    	free(restaurantsArray[i]);
@@ -53,12 +53,12 @@ int main() {
 
 		// Add restaurant mode
         } else if (strcmp(inputCopy, "a") == 0) {
-			if (addRestaurant(restaurantsArrayCopy) == -1) {
+			if (addRestaurant(restaurantsArrayCopy, &insertIndex) == -1) {
 				break;
 			}
 		// Remove restaurant mode
 		} else if (strcmp(inputCopy, "r") == 0) {
-			if (removeRestaurant(restaurantsArray, restaurantsArrayCopy) == -1) {
+			if (removeRestaurant(restaurantsArray, restaurantsArrayCopy, &insertIndex) == -1) {
 				break;
 			}
 		// Select restaurant mode
@@ -83,7 +83,7 @@ int main() {
 /*
 	Opens restaurants.txt and reads in the contents into a string array
 */
-int getRestaurantsFromFile(char **restaurantsArray) {
+int getRestaurantsFromFile(char **restaurantsArray, int *insertIndex) {
     FILE *restaurantsFile = fopen("./restaurants.txt", "r");
     char *restaurant = (char *)malloc(50 * sizeof(char));
     char *restaurantCopy = restaurant;
@@ -96,13 +96,13 @@ int getRestaurantsFromFile(char **restaurantsArray) {
     }
     else {   
         while (fgets(restaurantCopy, 50, restaurantsFile)) {
-            restaurantsArray[insertIndex] = (char*)malloc(50 * sizeof(char));
+            restaurantsArray[*insertIndex] = (char*)malloc(50 * sizeof(char));
             // replace newline at end of string with null terminator if exist
             if (restaurantCopy[strlen(restaurantCopy)-1] == '\n') {
                 restaurantCopy[strlen(restaurantCopy)-1] = '\0';
             }
-            strcpy(restaurantsArray[insertIndex], restaurantCopy);
-            insertIndex++;
+            strcpy(restaurantsArray[*insertIndex], restaurantCopy);
+            (*insertIndex)++;
         }
         fclose(restaurantsFile);
         free(restaurant);
@@ -110,7 +110,7 @@ int getRestaurantsFromFile(char **restaurantsArray) {
     }
 }
 
-int addRestaurant(char **restaurantsArrayCopy) {
+int addRestaurant(char **restaurantsArrayCopy, int *insertIndex) {
 	FILE *restaurantsFile = fopen("./restaurants.txt", "a");
 	char *restaurant = (char *)malloc(50 * sizeof(char));
 	char *restaurantCopy = restaurant;
@@ -128,9 +128,9 @@ int addRestaurant(char **restaurantsArrayCopy) {
 	}
 
 	// add to array
-	restaurantsArrayCopy[insertIndex] = (char *) malloc(50 * sizeof(char));
-	strcpy(restaurantsArrayCopy[insertIndex], restaurantCopy);
-	insertIndex++;
+	restaurantsArrayCopy[*insertIndex] = (char *) malloc(50 * sizeof(char));
+	strcpy(restaurantsArrayCopy[*insertIndex], restaurantCopy);
+	(*insertIndex)++;
 	
 	// write to file
 	fprintf(restaurantsFile, "\n");
@@ -140,7 +140,7 @@ int addRestaurant(char **restaurantsArrayCopy) {
 	return 0;
 }
 
-int removeRestaurant(char **restaurantsArray, char **restaurantsArrayCopy) {
+int removeRestaurant(char **restaurantsArray, char **restaurantsArrayCopy, int *insertIndex) {
 	FILE *restaurantsFile = fopen("./restaurants.txt", "r");
 	char *restaurant = (char *)malloc(50 * sizeof(char));
 	char *restaurantCopy = restaurant;
@@ -160,19 +160,19 @@ int removeRestaurant(char **restaurantsArray, char **restaurantsArrayCopy) {
 
 	int found = 0;
 	// remove from array
-	for (int index = 0; index < insertIndex; index++) {
+	for (int index = 0; index < *insertIndex; index++) {
 		if (strcmp(restaurantsArrayCopy[index], restaurantCopy) == 0) {
 			found = 1;
 			// if element to remove is simply last element, free memory and decrease insertIndex
-			if (index == (insertIndex - 1)) {
-				free(restaurantsArray[insertIndex - 1]);
-				insertIndex--;
+			if (index == (*insertIndex - 1)) {
+				free(restaurantsArray[*insertIndex - 1]);
+				(*insertIndex)--;
 			}
 			// else we need to swap with last element, and free memory of last index and derease insertIndex
 			else {
-				strcpy(restaurantsArrayCopy[index], restaurantsArrayCopy[insertIndex-1]);
-				free(restaurantsArray[insertIndex-1]);
-				insertIndex--;
+				strcpy(restaurantsArrayCopy[index], restaurantsArrayCopy[*insertIndex-1]);
+				free(restaurantsArray[*insertIndex-1]);
+				(*insertIndex)--;
 			}
 		}
 	}
@@ -184,9 +184,9 @@ int removeRestaurant(char **restaurantsArray, char **restaurantsArrayCopy) {
 	// write to fie
 	fclose(restaurantsFile);
 	restaurantsFile = fopen("./restaurants.txt", "w");
-	for (int index = 0; index < insertIndex; index++) {
+	for (int index = 0; index < *insertIndex; index++) {
 		// If last restaurant, we don't want to print a trailing newline at the end of the file.
-		if (index == insertIndex - 1) {
+		if (index == *insertIndex - 1) {
 			fprintf(restaurantsFile, "%s", restaurantsArrayCopy[index]);
 		} else {
 			fprintf(restaurantsFile, "%s\n", restaurantsArrayCopy[index]);
