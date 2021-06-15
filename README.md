@@ -5,11 +5,11 @@ Software choose where to go for lunch on fridays in a random way. It allows the 
 and randomly select a restaurant from memory at runtime and also simultaneously saves the list of 
 restaurants added to a text file, allowing the data to persist between sessions.
 
-**Author**
+### Author
 
 Lukas Jenks
 
-**System Prerequisites**
+### System Prerequisites
 
 This project most recently tested with the following:
 
@@ -20,13 +20,15 @@ Thread model: posix
 gcc 11.1.0
 GNU Make 4.3
 
-**Running Instructions**
+but should run on any unix-based OS.
+
+## Running Instructions
 
 To run the program, run:
 
 `make all`
 
-**Explanation of Test**
+## Explanation of Test
 
 Executing
 
@@ -43,7 +45,7 @@ and
 which compile picker.c using picker.h into the executable picker, then runs
 the executable, respectively.
 
-**Output**
+### Output
 
 An interactive shell should launch upon executing the executable. Enter q
 to exit the shell.
