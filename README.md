@@ -24,6 +24,10 @@ but should run on any unix-based OS.
 
 ## Running Instructions
 
+First, create the file restaurants.txt in the root directory
+of the project, and populate it with a few restaurants to
+start with.
+
 To run the program, run:
 
 `make all`
