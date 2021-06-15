@@ -1,4 +1,4 @@
-##Summary
+## Summary
 
 This project contains a simple program I wrote in 2019 to help my fellow employees and I at Method1
 Software choose where to go for lunch on fridays in a random way. It allows the user to add, remove,
